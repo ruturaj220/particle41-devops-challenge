@@ -167,6 +167,125 @@ docker rmi simpletimeservice:latest
 docker rmi ruturaj21/simpletimeservice:latest
 ```
 
+# Part 2: Terraform AWS Deployment
+
+Deploy the SimpleTimeService to AWS using Terraform with ECS Fargate, VPC, and Application Load Balancer.
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- AWS Account with programmatic access
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed
+- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) installed
+
+### Step 1: Configure AWS
+```bash
+aws configure
+```
+Enter your:
+- AWS Access Key ID
+- AWS Secret Access Key  
+- Default region (e.g., `us-east-2`)
+- Default output format: `json`
+
+### Step 2: Deploy Infrastructure
+```bash
+# Navigate to terraform directory
+cd terraform/
+
+# Initialize Terraform
+terraform init
+
+# Review what will be created
+terraform plan
+
+# Deploy (takes 5-10 minutes)
+terraform apply --auto-approve
+```
+
+### Step 3: Get Application URL
+After deployment completes, copy the ALB DNS name from the output:
+```
+Outputs:
+alb_dns_name = "your-alb-dns-name.us-east-2.elb.amazonaws.com"
+```
+
+### Step 4: Test Application
+```bash
+# Test the endpoint
+curl http://your-alb-dns-name.us-east-2.elb.amazonaws.com/
+```
+
+**Expected Response:**
+```json
+{
+  "timestamp": "2025-07-13T11:15:07.224215",
+  "ip": "10.0.1.124"
+}
+```
+
+### Step 5: Cleanup (Important!)
+```bash
+# Destroy infrastructure to avoid charges
+terraform destroy --auto-approve
+```
+
+---
+
+## 📋 What Gets Created
+
+### AWS Resources
+- **VPC** with public/private subnets
+- **ECS Fargate Cluster** running the container
+- **Application Load Balancer** for public access
+- **Security Groups** for network security
+- **IAM Roles** for ECS permissions
+- **CloudWatch Logs** for monitoring
+
+### Network Setup
+- Public subnets: Load balancer
+- Private subnets: ECS containers
+- NAT Gateway: Outbound internet access
+- Internet Gateway: Inbound public access
+
+---
+
+## 🔍 Troubleshooting
+
+### If Application Doesn't Load
+1. Wait 2-3 minutes after `terraform apply` completes
+2. Check ECS service in AWS Console:
+   - Go to **ECS > Clusters > particle41-devops-challenge-cluster**
+   - Verify tasks are running and healthy
+
+### If Terraform Fails
+- Ensure AWS credentials are configured correctly
+- Check you have required IAM permissions
+- Verify region is consistent
+
+### Common Issues
+- **Service unhealthy**: Wait for ECS tasks to start
+- **Connection timeout**: Check security group rules
+- **404 errors**: Verify ALB target group health
+
+---
+
+## 📝 Testing Checklist
+
+- [ ] AWS CLI configured with valid credentials
+- [ ] Terraform installed and working
+- [ ] `terraform init` successful
+- [ ] `terraform plan` shows resources to create
+- [ ] `terraform apply` completes without errors
+- [ ] ALB DNS name returned in output
+- [ ] Application responds with JSON at the URL
+- [ ] `terraform destroy` cleans up resources
+
+---
+
+**Need help?** Check the AWS Console for ECS service status and CloudWatch logs for any errors.
 ## 👤 Author
 
 **Ruturaj**
