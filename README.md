@@ -26,7 +26,13 @@ A minimal FastAPI-based web service that returns a JSON response at `/` with:
 │   ├── app.py             # FastAPI app
 │   ├── requirements.txt   # Python dependencies
 │   └── Dockerfile         # Container build config
-├── terraform/             # Infrastructure as Code (Part 2)
+├── terraform/             # Contains Terraform configuration files for AWS infrastructure            
+│   ├── main.tf           # Defines VPC, subnets, NAT Gateway, ALB, ECS cluster, tasks, services, security groups
+│   ├── variables.tf      # Input variables for Terraform configuration
+│   ├── outputs.tf        # Output values
+│   ├── versions.tf       # Specifies Terraform and provider versions
+│   └── terraform.tfstate # Terraform state file (managed locally by default)
+
 └── README.md             # This file
 ```
 
@@ -145,7 +151,7 @@ docker rmi simpletimeservice:latest
 
 ---
 
-## 🧹 Cleanup
+## Cleanup
 
 To clean up all resources:
 
@@ -160,7 +166,6 @@ docker rmi simpletimeservice:latest
 # Remove pulled image (optional)
 docker rmi ruturaj21/simpletimeservice:latest
 ```
-
 
 ## 👤 Author
 
